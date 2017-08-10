@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>360页面</title>
+    <script src="js/jquery-1.12.4.js"></script>
+    <script src="js/jquery.fullPage.min.js"></script>
+    <link rel="stylesheet" href="css/jquery.fullPage.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        /*头部*/
+        #menu{
+            width: 100%;
+            height: 50px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            background-color: rgba(0,0,0,.4);
+        }
+        #menu li{
+            text-align: center;
+            width: 20%;
+            line-height: 50px;
+            float: left;
+            cursor: pointer;
+        }
+        #menu li a{
+            color: #fff;
+            text-decoration:none;
+            width: 100%;
+            font-size: 16px;
+            display: inline-block;
+        }
+        #menu .active{
+            color: #fff;
+            background-color: rgba(0,0,0,0.7);
+        }
+
+
+        /*右边导航*/
+        #fp-nav ul li a span{
+            border: 1px solid seashell;
+        }
+        #fp-nav ul li a.active span{
+            background: #fff;
+            box-shadow: 0 0 5px #fff;
+            width: 12px;
+            height: 12px;
+            left: 1px;
+        }
+
+        .section{
+            overflow: hidden;
+        }
+        /*第一屏样式*/
+        .one .logo{
+            background: url(images/logo.png) no-repeat;
+            width: 258px;
+            height: 186px;
+            margin: 100px auto;
+        }
+        .one .text{
+            /*设置文字水平居中*/
+            text-align: center;
+        }
+        .one .text img{
+            /*先设置文字间的距离*/
+            margin: 0 30px;
+            /*设置文字透明度*/
+            opacity: 0.2;
+        }
+        /*添加文字的样式*/
+        .one.current .text img{
+            margin: 0 5px;
+            opacity: 1;
+            transition: all 1s;
+        }
+        .one .info{
+            width: 772px;
+            height: 49px;
+            background: url(images/info_1.png) no-repeat;
+            margin: 50px auto;
+        }
+
+
+        /*第二屏*/
+        .two {
+            display: flex;
+            justify-content: space-around;
+            padding: 120px 0;
+        }
+        .two .shield {
+            width: 420px;
+            height: 490px;
+        }
+        .two .shield img:first-child{
+            transform: translate(85px,145px) rotate(36deg);
+        }
+        .two .shield img:nth-child(2){
+            transform: translate(34px,105px) rotate(70deg);
+        }
+        .two .shield img:nth-child(3){
+            transform: translate(250px,100px) rotate(96deg);
+        }
+        .two .shield img:nth-child(4){
+            transform: translate(185px,198px) rotate(120deg);
+        }
+        .two .shield img:nth-child(5){
+            transform: translate(-160px,145px) rotate(80deg);
+        }
+        .two .shield img:nth-child(6){
+            transform: translate(-270px,145px) rotate(0deg);
+        }
+        .two .shield img:nth-child(7){
+            transform: translate(270px,-45px) rotate(90deg);
+        }
+        .two.current .shield img{
+            transform: translate(0,0) rotate(0deg);
+            transition: all 1.5s;
+        }
+
+        /*第三屏*/
+        .three .info{
+            position: absolute;
+            top:50%;
+            left: 50%;
+            margin: -150px 0 0 -630px;
+        }
+        .three .circle{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -230px 0 0 120px;
+        }
+        .three .rocket{
+            position: absolute;
+            top: 100%;
+            left: 30%;
+            opacity: 0;
+        }
+        .three.current .rocket{
+            top: 50%;
+            left: 50%;
+            opacity: 1;
+            margin: -112px 0 0 240px;
+            transition: all 1.5s;
+        }
+        /*第四屏*/
+        .four{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .four .movie{
+            width: 529px;
+            height: 450px;
+            /*border: 1px solid #000000;*/
+            position: relative;
+        }
+        .four .movie .search{
+            background: url(images/search.png) no-repeat;
+            width: 529px;
+            height: 66px;
+            position: absolute;
+            top: 0;
+            transform: translateX(-150%);
+        }
+        .four .movie .keyword{
+            height: 22px;
+            /*width: 99px;*/
+            background: url(images/key.png) no-repeat;
+            position: absolute;
+            top: 22px;
+            left: 20px;
+            /*当宽度和高度任何一个为0的时候，内容就无法显示*/
+            width: 0;
+        }
+        .four .movie .content{
+            width: 529px;
+            /*height: 372px;*/
+            background: url(images/result.png) no-repeat;
+            position: absolute;
+            top: 53px;
+            /*当宽度和高度任何一个为0的时候，内容就无法显示*/
+            height: 0;
+        }
+         /*输入框的动画*/
+        .four.current .search{
+            transform: translateX(0);
+            transition: all 1.5s;
+        }
+        .four.current .keyword{
+            width: 99px;
+            transition: all 1.5s 1s;
+        }
+        .four.current .content{
+            height: 372px;
+            transition: all 1.5s 2s;
+        }
+        /*第五屏*/
+        .five{
+            display: flex;
+            /*把原来的主轴改变*/
+            flex-direction: column;
+            align-items: center;
+        }
+        .five .info{
+            width: 1077px;
+            height: 134px;
+            background: url(images/info_5.png) no-repeat;
+            margin-top: 50px;
+        }
+        .five .box{
+            width: 1044px;
+            height: 520px;
+            /*border: 1px solid #000;*/
+            background-color: rgba(255,255,255,.2);
+            margin-top: 20px;
+            position: relative;
+            /*在四条边动画执行时，在盒子外面的先隐藏*/
+            overflow: hidden;
+        }
+        .line_top,.line_bottom{
+            width: 1044px;
+            height: 1px;
+            background:rgba(255,255,255,1);
+            position: absolute;
+        }
+        .line_top{
+            top:0;
+            transform: translateX(140%);
+        }
+        .line_bottom{
+            bottom: 0;
+            transform: translateX(-140%);
+        }
+        .line_left,.line_right{
+            width: 1px;
+            height: 520px;
+            position: absolute;
+            background: rgba(255,255,255,1);
+        }
+        .line_left{
+            left: 0;
+            transform: translateY(-140%);
+        }
+        .line_right{
+            right: 0;
+            transform: translateY(140%);
+        }
+        /*四条边框的动画*/
+        .five.current div[class ^= 'line']{  /*选择class前面都是 line开头的div*/
+            transform: translate(0,0);
+            transition: all 3s;
+        }
+        /*内部元素*/
+        .five .e{
+            width: 1004px;
+            height: 79px;
+            background: url(images/toolbar.png) no-repeat;
+            opacity: 0;
+
+        }
+        .five .srbox{
+            /*width: 930px;*/
+            height: 30px;
+            border: 0px solid #fff;
+            position: absolute;
+            top:28px;
+            left: 70px;
+            width: 0;
+        }
+        .five .extra{
+            width: 394px;
+            height: 29px;
+            background: url(images/extra.png) no-repeat;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            opacity: 0;
+        }
+        .five .bottoms{
+            width: 1044px;
+            height: 1px;
+            background: rgba(255,255,255,.7);
+            position: absolute;
+            bottom: 30px;
+            transform: translateX(-150%);
+        }
+        /*第五屏动画*/
+        .five.current .e{
+            transition: all 1.5s;
+            opacity: 1;
+        }
+        .five.current .srbox{
+            width: 930px;
+            border: 1px solid rgba(255,255,255,.7);
+            transition: all 1.5s;
+        }
+        .five.current .extra{
+            opacity: 1;
+            transition: all 1.5s;
+        }
+        .five.current .bottoms{
+            transform: translateX(0);
+            transition: all 1.5s;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <!--第一屏-->
+    <div class="section one">
+        <div class="logo"></div>
+        <div class="text">
+            <img src="images/text_1.png" alt=""/>
+            <img src="images/text_2.png" alt=""/>
+            <img src="images/text_3.png" alt=""/>
+            <img src="images/text_4.png" alt=""/>
+            <img src="images/text_5.png" alt=""/>
+            <img src="images/text_6.png" alt=""/>
+            <img src="images/text_7.png" alt=""/>
+            <img src="images/text_8.png" alt=""/>
+        </div>
+        <div class="info"></div>
+    </div>
+
+    <!--第二屏-->
+    <div class="section two">
+        <div class="shield">
+            <img src="images/shield_1.png" alt=""/>
+            <img src="images/shield_2.png" alt=""/>
+            <img src="images/shield_3.png" alt=""/>
+            <img src="images/shield_4.png" alt=""/>
+            <img src="images/shield_5.png" alt=""/>
+            <img src="images/shield_6.png" alt=""/>
+            <img src="images/shield_7.png" alt=""/>
+            <img src="images/shield_8.png" alt=""/>
+            <img src="images/shield_9.png" alt=""/>
+        </div>
+        <div class="info">
+            <img src="images/info_2.png" alt=""/>
+        </div>
+    </div>
+
+    <!--第三屏-->
+    <div class="section three">
+        <div class="info">
+            <img src="images/info_3.png" alt=""/>
+        </div>
+        <div class="circle">
+            <img src="images/circle.png" alt=""/>
+        </div>
+        <div class="rocket">
+            <img src="images/rocket.png" alt=""/>
+        </div>
+    </div>
+    
+    <!--第四屏-->
+    <div class="section four">
+        <div class="movie">
+            <div class="search"></div>
+            <div class="keyword"></div>
+            <div class="content"></div>
+        </div>
+        <div class="info">
+            <img src="images/info_4.png" alt=""/>
+        </div>
+    </div>
+
+    <!--第五屏-->
+    <div class="section five">
+        <div class="info"></div>
+        <!--给一个盒子-->
+        <div class="box">
+            <!--盒子的四条边线-->
+            <div class="line_top"></div>
+            <div class="line_left"></div>
+            <div class="line_right"></div>
+            <div class="line_bottom"></div>
+            <!--内部元素-->
+            <!--e图片-->
+            <div class="e"></div>
+            <!--透明度输入框-->
+            <div class="srbox"></div>
+            <!--底部内容-->
+            <div class="extra"></div>
+            <!--底部透明度线-->
+            <div class="bottoms"></div>
+        </div>
+    </div>
+
+    <!--导航栏-->
+    <ul id="menu">
+        <li data-menuanchor="p1" class="active"><a href="#p1">page1</a></li>
+        <li data-menuanchor="p2" class=""><a href="#p2">page2</a></li>
+        <li data-menuanchor="p3"><a href="#p3">page3</a></li>
+        <li data-menuanchor="p4"><a href="#p4">page4</a></li>
+        <li data-menuanchor="p5"><a href="#p5">page5</a></li>
+    </ul>
+</div>
+</body>
+</html>
+<script>
+    $(function(){
+        $('.section').eq(0).addClass('current');
+
+        $('#box').fullpage({
+            sectionsColor:['#0DA5D6','#2AB561','#DE8910','#16BA9D','#0DA5D6'],
+            verticalCentered:false,
+            onLeave:function (anchorLink, index){
+                // 只有加载到当前页面的时候，才会给当前的这个section添加current类，其它的都需要移除掉
+                $('.section').eq(index-1).addClass('current').siblings().removeClass('current');
+                console.log(index);
+            },
+            anchors: ['p1', 'p2', 'p3', 'p4', 'p5'],
+            navigation:true,
+            menu: '#menu',
+        });
+
+    });
+</script>
